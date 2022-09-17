@@ -18,11 +18,11 @@ prior_order_details = pd.read_pickle('data/prior_order_details.pickle')[['order_
 prior_order_details = prior_order_details.merge(orders, on= ['order_id', 'user_id'], how='left')
 
 # cal metrics
-dow = pd.crosstab(prior_order_details['user_id'], prior_order_details['order_dow']).add_prefix('users_purchases_dow_')
-dow_norm = pd.crosstab(prior_order_details['user_id'], prior_order_details['order_dow'], normalize='index').add_prefix('users_norm_purchases_dow_')
+dow = pd.crosstab(prior_order_details['user_id'], prior_order_details['order_dow']).add_prefix('user_purchases_dow_')
+dow_norm = pd.crosstab(prior_order_details['user_id'], prior_order_details['order_dow'], normalize='index').add_prefix('user_norm_purchases_dow_')
 
-part_of_day = pd.crosstab(prior_order_details['user_id'], prior_order_details['part_of_day']).add_prefix('users_purchases_pod_')
-part_of_day_norm = pd.crosstab(prior_order_details['user_id'], prior_order_details['part_of_day'], normalize='index').add_prefix('users_norm_purchases_pod_')
+part_of_day = pd.crosstab(prior_order_details['user_id'], prior_order_details['part_of_day']).add_prefix('user_purchases_pod_')
+part_of_day_norm = pd.crosstab(prior_order_details['user_id'], prior_order_details['part_of_day'], normalize='index').add_prefix('user_norm_purchases_pod_')
 
 users_order_time = pd.concat([dow, dow_norm, part_of_day, part_of_day_norm], axis=1).reset_index()
 

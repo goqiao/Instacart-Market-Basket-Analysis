@@ -82,10 +82,9 @@ users_3.columns = users_3.columns.get_level_values(0) + '_' + users_3.columns.ge
 # TODO: _uo_products_mean vs _user_mean_order_size, both measures basket size?
 users_3.rename(columns={'product_id_count_mean': 'uo_basket_size_mean',
                         'product_id_count_std': 'uo_basket_size_std',
-                        'aisle_nunique_mean': 'uo_unique_aisle_mean',
-                        'aisle_nunique_std': 'uo_unique_aisle_std',
-                        'department_nunique_mean': 'uo_unique_department_mean',
-                        'department_nunique_std': 'uo_unique_department_std',
+                        'aisle_nunique': 'uo_unique_aisle_mean',
+                        'department_nunique': 'uo_unique_department_mean',
+                        # 'department_nunique_std': 'uo_unique_department_std',
                         'reordered_sum_mean': 'uo_reorered_products_mean',
                         'reordered_sum_std': 'uo_reordered_products_std',
                         'reordered_mean_mean': 'uo_reorder_ratio_mean',

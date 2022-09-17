@@ -16,10 +16,10 @@ user_organic_counts = prior_order_details.groupby('user_id').agg({'product_id':'
                                                                  'p_is_organic':'sum',
                                                                  'p_is_gluten_free':'sum',
                                                                  'p_is_asian':'sum'}).reset_index()
-user_organic_counts['users_organic_ratio'] = user_organic_counts['p_is_organic']/user_organic_counts['product_id']
-user_organic_counts['users_gluten_free_ratio'] = user_organic_counts['p_is_gluten_free']/user_organic_counts['product_id']
-user_organic_counts['users_asian_food_ratio'] = user_organic_counts['p_is_asian']/user_organic_counts['product_id']
-user_organic_counts[['user_id', 'users_organic_ratio', 'users_gluten_free_ratio', 'users_asian_food_ratio']].to_pickle(
+user_organic_counts['user_organic_ratio'] = user_organic_counts['p_is_organic']/user_organic_counts['product_id']
+user_organic_counts['user_gluten_free_ratio'] = user_organic_counts['p_is_gluten_free']/user_organic_counts['product_id']
+user_organic_counts['user_asian_food_ratio'] = user_organic_counts['p_is_asian']/user_organic_counts['product_id']
+user_organic_counts[['user_id', 'user_organic_ratio', 'user_gluten_free_ratio', 'user_asian_food_ratio']].to_pickle(
                                                                                 '{}/users_organic_purchases.pickle'.format(data_folder))
 print(user_organic_counts.head())
 
@@ -30,9 +30,9 @@ user_organic_counts_r5 = prior_order_details.groupby('user_id').agg({'product_id
                                                                      'p_is_organic':'sum',
                                                                      'p_is_gluten_free':'sum',
                                                                      'p_is_asian':'sum'}).reset_index()
-user_organic_counts_r5['users_organic_ratio_r5'] = user_organic_counts_r5['p_is_organic']/user_organic_counts_r5['product_id']
-user_organic_counts_r5['users_gluten_free_ratio_r5'] = user_organic_counts_r5['p_is_gluten_free']/user_organic_counts_r5['product_id']
-user_organic_counts_r5['users_asian_food_ratio_r5'] = user_organic_counts_r5['p_is_asian']/user_organic_counts_r5['product_id']
-user_organic_counts_r5[['user_id', 'users_organic_ratio_r5', 'users_gluten_free_ratio_r5'
-                    , 'users_asian_food_ratio_r5']].to_pickle('{}/users_organic_purchases_r5.pickle'.format(data_folder))
+user_organic_counts_r5['user_organic_ratio_r5'] = user_organic_counts_r5['p_is_organic']/user_organic_counts_r5['product_id']
+user_organic_counts_r5['user_gluten_free_ratio_r5'] = user_organic_counts_r5['p_is_gluten_free']/user_organic_counts_r5['product_id']
+user_organic_counts_r5['user_asian_food_ratio_r5'] = user_organic_counts_r5['p_is_asian']/user_organic_counts_r5['product_id']
+user_organic_counts_r5[['user_id', 'user_organic_ratio_r5', 'user_gluten_free_ratio_r5'
+                    , 'user_asian_food_ratio_r5']].to_pickle('{}/users_organic_purchases_r5.pickle'.format(data_folder))
 print(user_organic_counts_r5.head())
