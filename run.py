@@ -32,14 +32,14 @@ os.system('python 310_up_substitution_organic.py')
 os.system('python 311_up_substitution.py')
 
 
-### 4xx concat features
+# ### 4xx concat features
 os.system('python 401_concat_up.py')
 
 
 ### 5xx train model and predict
 os.system('python 501_xgb.py')
 os.system('python 502_xgb_predict.py')
-os.system('python 503_test_performance.py')
+# os.system('python 503_test_performance.py')
 
 
 ### 6xx output

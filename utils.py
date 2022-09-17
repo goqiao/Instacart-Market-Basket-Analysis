@@ -186,41 +186,57 @@ def compress(df, key):
     return _df.reset_index()
 
 
+def group_existing_features(top_percent=0.4, mid_percent=0.3):
+    fi = pd.read_csv('data/up_feature_importance.csv')
+    num_features = fi.shape[0]
+
+    top_percent = top_percent
+    mid_percent = mid_percent
+
+    def fi_group(i):
+        if i < num_features * top_percent:
+            return 'high_fi'
+        elif i < num_features * (mid_percent + top_percent):
+            return 'middle_fi'
+        else:
+            return 'low_fi'
+
+    fi['importance_group'] = fi.reset_index()['index'].apply(lambda x: fi_group(x))
+    fi['feature_group'] = fi['features'].str.extract(r'([a-z]+)_.*')
+
+    # TODO: users and aisle can be removed after rerun
+    fi['feature_group'] = fi['feature_group'].str.replace('users', 'user', regex=False)
+    fi['feature_group'] = fi['feature_group'].str.replace('uo', 'user', regex=False)
+    fi['feature_group'] = fi['feature_group'].str.replace('aisle', 'user', regex=False)
+
+    print('Feature Groups:')
+    print(fi['feature_group'].value_counts(dropna=False))
+
+    groups = fi[['features', 'feature_group', 'importance_group']].groupby(['feature_group', 'importance_group'])[
+        'features'].apply(lambda x: x.to_list()).reset_index()
+    groups['fi_group'] = groups['feature_group'] + '_' + groups['importance_group']
+    groups[['fi_group', 'features']].to_pickle('data/fi_group.pickle')
+
 def keep_top_features(df):
-    users_high_im = ['user_age_days_on_platform', 'user_total_orders', 'user_mean_days_order_interval', 'user_std_days_order_interval',
-                     'user_reorder_ratio', 'user_reorder_rate', 'user_next_order_readiness', 'user_order_freq']
-    users_med_im = ['user_product_total', 'user_product_unique', 'user_days_not_purchase', 'uo_basket_size_mean', 'uo_unique_aisle_mean',
-                    'uo_unique_department_mean', 'uo_reorered_products_mean', 'uo_reordered_products_std', 'uo_reorder_ratio_mean',
-                    ]
-    users_low_im = ['user_mean_order_dow', 'user_std_order_dow', 'user_mean_order_hour', 'user_std_order_hour',
-                    'aisle_nunique', 'user_department_unique', 'user_reorder_prod_total', 'user_order_num_sum_exclude_1st',
-                    'uo_basket_size_std', 'uo_unique_aisle_std', 'uo_unique_department_std', 'uo_reorder_ratio_std', ]
+    # TODO: this function need to be hard coded after finalizing code. Other people won't have the fi csv file in the first run
+    # fi_group = group_existing_features(top_percent=0.4, mid_percent=0.3).set_index('fi_group')
+    fi_group = pd.read_pickle('data/fi_group.pickle').set_index('fi_group')
+    print(fi_group)
+    p_high = fi_group.loc['p_high', 'features']
+    p_middle = fi_group.loc['p_middle', 'features']
+    p_low = fi_group.loc['p_low', 'features']
 
-    products_high_im = ['p_num_purchases_per_user_q80', 'p_num_purchases_per_user_median', 'p_reorder_rate',
-                        'p_reorder_proba', 'p_num_purchases_per_user_mean', 'p_purchase_interval_days_q80']
+    user_high = fi_group.loc['user_high', 'features']
+    user_middle = fi_group.loc['user_middle', 'features']
+    user_low = fi_group.loc['user_low', 'features']
 
-    products_med_im = ['p_sum_reordered', 'p_num_purchases', 'p_unique_buyers', 'p_mean_add_cart_num', 'p_sum_secondtime_purchase',
-                       'p_sum_onetime_purchase', 'p_avg_first_reorder_diff', 'p_std_first_reorder_diff', 'p_num_purchases_per_user_std',
-                       'p_purchase_interval_days_mean', 'p_purchase_interval_days_median', 'p_purchase_interval_days_max_woo']
+    up_high = fi_group.loc['up_high', 'features']
+    up_middle = fi_group.loc['up_middle', 'features']
+    up_low = fi_group.loc['up_low', 'features']
 
-    products_low_im = ['p_std_add_cart_num', 'p_avg_first_order_num', 'p_std_first_order_num', 'p_avg_first_reorder_num',
-                       'p_std_first_reorder_num', 'p_num_purchases_per_user_max', 'p_num_purchases_per_user_min', 'p_num_purchases_per_user_q20',
-                       'p_purchase_interval_days_std', 'p_purchase_interval_days_q20', 'p_purchase_interval_days_min_woo']
-
-    up_high_im = ['up_purchase_time', 'up_reorder_times', 'up_purchase_times_r5', 'up_purchase_ratio_r5',
-                  'up_purchase_interval_days_mean_r5', 'up_purchase_interval_days_median_r5', 'up_days_since_last_purchase_max_r5',
-                  'up_days_since_last_purchase_min_r5', 'up_purhcase_proba', 'up_purhcase_proba_r5', 'up_num_days_not_purchase',
-                  ]
-    up_med_im = ['up_cart_order_mean', 'up_cart_order_min', 'up_cart_order_median', 'up_first_order', 'up_last_order',
-                 'up_mean_order_num', 'up_std_order_num', 'up_purchase_interval_days_mean', 'up_purchase_interval_days_median',
-                 'up_purchase_interval_days_max', 'up_purchase_interval_days_min']
-    up_low_im = ['up_cart_order_std', 'up_cart_order_sum', 'up_cart_order_max', ]
-
-    cols = users_high_im + users_med_im + users_low_im + products_high_im + products_med_im + products_low_im \
-           + up_high_im + up_med_im + up_low_im
-
-
-    return df[cols]
+    # assert len(p_high + p_middle + user_high + user_middle + up_high + up_middle + p_low + user_low + up_low) == 165
+    to_keep = p_high + p_middle + user_high + user_middle + up_high + up_middle
+    return df[to_keep]
 
 
 def download_user_order_history(uid, pid, label=''):

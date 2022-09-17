@@ -7,6 +7,7 @@ from utils import split_data, print_eval_metrics, save_fig_with_timestamp
 import matplotlib.pyplot as plt
 import time
 import mlflow
+from utils import keep_top_features
 
 # takes 18 mins
 start_time = time.time()
@@ -14,7 +15,7 @@ if __name__ == '__main__':
     print(1)
     # experiment setting
     experiment_name = 'Instacart'
-    run_name = 'added skewness, renamed features, reordered files'
+    run_name = 'added feature selection, keep_top_features'
 
     data_folder = 'data'
     sample_frac = 0.3
@@ -58,6 +59,9 @@ if __name__ == '__main__':
     drop_cols =['order_id', 'user_id', 'product_id']
     X_train = X_train.drop(columns=drop_cols)
     X_val = X_val.drop(columns=drop_cols)
+
+    X_train = keep_top_features(X_train)
+    X_val = keep_top_features(X_val)
 
     xgb_params = {
         'n_estimators': 1000

@@ -4,15 +4,18 @@ import time
 import xgboost
 pd.set_option('display.max_columns', None)
 from _threshold_exploration import f1_maximization
+from utils import keep_top_features
 
 start_time = time.time()
 data_folder = 'data'
 
 
 def xgb_predict_proba_pipe(X, data_folder='data', return_data=False, scaling=False):
+    X = X.drop(['order_id', 'user_id', 'product_id'], axis=1)
     if 'reordered' in X.columns:
+        # test data
         X = X.drop('reordered', axis=1)
-    X = X.drop(['order_id',  'user_id', 'product_id'], axis=1)
+        X = keep_top_features(X)
     if scaling:
         scaler = joblib.load('{}/xgb_scaler.joblib'.format(data_folder))
         X = scaler.transform(X)
