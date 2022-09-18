@@ -63,7 +63,7 @@ users_2.rename(columns={'product_id_count': 'user_product_total',
 users_2.reset_index(inplace=True)
 
 # TODO: _user_reorder_ratio doesn't make sense?
-users_2['user_reorder_ratio'] = users_2['user_reorder_prod_total'] / users_2['user_order_num_sum_exclude_1st']
+# users_2['user_reorder_ratio'] = users_2['user_reorder_prod_total'] / users_2['user_order_num_sum_exclude_1st']
 
 # create feature _user_days_not_purchase
 users_2 = users_2.merge(orders.loc[orders['eval_set'] != 'prior', ['user_id', 'days_since_prior_order']],
@@ -103,6 +103,8 @@ users_features = users_1.merge(users_2).merge(users_3)
 #                                                 users_features['_user_product_unique']) / users_features['_user_product_total']
 users_features['user_reorder_rate'] = users_features['user_reorder_prod_total'] / users_features[
     'user_product_total']
+users_features['user_reordered_products_per_order'] = users_features['user_reorder_prod_total']/users_features['user_total_orders']
+
 # users_features['_user_mean_order_size'] = users_features['_user_product_total'] / users_features['_user_total_orders']
 users_features['user_next_order_readiness'] = users_features['user_days_not_purchase'] - users_features['user_mean_days_order_interval']
 # TODO: check corr between user_order_freq and user_mean_days_order_interval
