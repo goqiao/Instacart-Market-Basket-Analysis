@@ -54,7 +54,7 @@ users_2.columns = users_2.columns.get_level_values(0) + '_' + users_2.columns.ge
 
 users_2.rename(columns={'product_id_count': 'user_product_total',
                         'product_id_nunique': 'user_product_unique',
-                        'aisle_unique': 'user_aisle_unique',
+                        'aisle_nunique': 'user_aisle_unique',
                         'department_nunique': 'user_department_unique',
                         'reordered_sum': 'user_reorder_prod_total',
                         'order_number_<lambda>': 'user_order_num_sum_exclude_1st'
