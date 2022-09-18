@@ -31,7 +31,9 @@ product_1 = product_1_temp.rename(columns={'order_id_nunique': 'p_num_purchases'
                                            '_up_purchase_order_<lambda>': 'p_sum_secondtime_purchase'})
 product_1.reset_index(inplace=True)
 product_1['p_sum_onetime_purchase'] = product_1['p_num_purchases'] - product_1['p_sum_reordered']
-product_1['p_reorder_proba'] = product_1['p_sum_secondtime_purchase']/product_1['p_sum_onetime_purchase']
+product_1['p_ratio_2nd_to_onetime_purchases'] = product_1['p_sum_secondtime_purchase']/product_1['p_sum_onetime_purchase']
+# subsitute with p_reorder_rate
+# product_1['p_ratio_onetime_purchases'] = product_1['p_sum_onetime_purchase']/product_1['p_num_purchases']
 
 
 # fist order and first reorder

@@ -64,7 +64,7 @@ def make_data(data_folder='data', make_set='train'):
     #                            '_user_reorder_rate', '_user_reorder_ratio']
 
     # selected_product_features = ['product_id', '_p_purchase_times', '_p_unique_buyers', '_p_mean_add_cart_num',
-    #                              '_p_std_add_cart_num', '_p_reorder_rate', '_p_reorder_proba',
+    #                              '_p_std_add_cart_num', '_p_reorder_rate', '_p_ratio_2nd_to_onetime_purchases',
     #                              # '_p_sum_days_since_prior_order', '_p_mean_days_interval',
     #                              '_p_avg_first_reorder_diff', '_p_purchases_time_per_buyer',
     #                              '_p_sum_secondtime_purchase']

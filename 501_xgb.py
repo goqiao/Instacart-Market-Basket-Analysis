@@ -15,10 +15,10 @@ if __name__ == '__main__':
     print(1)
     # experiment setting
     experiment_name = 'Instacart'
-    run_name = 'added feature selection, keep_top_features'
+    run_name = 'sample frac 0.6, keep only high fi'
 
     data_folder = 'data'
-    sample_frac = 0.3
+    sample_frac = 0.6
     test_size = 0.2
     scaling = False
     data_full_features = pd.read_pickle('{}/train_full_features.pickle'.format(data_folder))
@@ -29,8 +29,6 @@ if __name__ == '__main__':
     data_full_features = data_full_features.sample(frac=sample_frac, random_state=0).reset_index(drop=True)
     print('train set AFTER sampling:')
     print(data_full_features.shape)
-    # feature selection
-    # data_full_features = keep_top_features(data_full_features)
     print(3)
     X_train, X_val, y_train, y_val = split_data(data_full_features, test_size=test_size, data_folder=data_folder,
                                                 split_by='user_id')
@@ -60,8 +58,8 @@ if __name__ == '__main__':
     X_train = X_train.drop(columns=drop_cols)
     X_val = X_val.drop(columns=drop_cols)
 
-    X_train = keep_top_features(X_train)
-    X_val = keep_top_features(X_val)
+    X_train = keep_top_features(X_train, keep_high_mid_fi=False, keep_high_fi=True)
+    X_val = keep_top_features(X_val, keep_high_mid_fi=False, keep_high_fi=True)
 
     xgb_params = {
         'n_estimators': 1000

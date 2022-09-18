@@ -15,7 +15,7 @@ def xgb_predict_proba_pipe(X, data_folder='data', return_data=False, scaling=Fal
     if 'reordered' in X.columns:
         # test data
         X = X.drop('reordered', axis=1)
-        X = keep_top_features(X)
+        X = keep_top_features(X, keep_high_mid_fi=False, keep_high_fi=True)
     if scaling:
         scaler = joblib.load('{}/xgb_scaler.joblib'.format(data_folder))
         X = scaler.transform(X)
