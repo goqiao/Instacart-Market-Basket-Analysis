@@ -217,25 +217,62 @@ def group_existing_features(top_percent=0.4, mid_percent=0.3):
     groups['fi_group'] = groups['feature_group'] + '_' + groups['importance_group']
     groups[['fi_group', 'features']].to_pickle('data/fi_group.pickle')
 
-def keep_top_features(df):
+def keep_top_features(df, keep_high_mid_fi=True, keep_high_fi=False):
     # TODO: this function need to be hard coded after finalizing code. Other people won't have the fi csv file in the first run
     # fi_group = group_existing_features(top_percent=0.4, mid_percent=0.3).set_index('fi_group')
-    fi_group = pd.read_pickle('data/fi_group.pickle').set_index('fi_group')
-    print(fi_group)
-    p_high = fi_group.loc['p_high', 'features']
-    p_middle = fi_group.loc['p_middle', 'features']
-    p_low = fi_group.loc['p_low', 'features']
+    # fi_group = pd.read_pickle('data/fi_group.pickle').set_index('fi_group')
+    # print(fi_group)
+    p_high = ['p_num_purchases_per_user_q80', 'p_ratio_2nd_to_onetime_purchases', 'p_num_purchases_per_user_mean',
+              'p_reorder_rate', 'p_num_purchases_per_user_median', 'p_purchase_interval_days_q80', 'p_sum_reordered',
+              'p_purchase_interval_days_mean', 'p_avg_first_reorder_diff', 'p_num_purchases_per_user_std', 'p_mean_add_cart_num',
+              'p_num_purchases', 'p_purchase_interval_days_max_woo', 'p_purchase_interval_days_median', 'p_purchase_interval_days_q20',
+              'p_unique_buyers', 'p_sum_secondtime_purchase']
+    p_middle = ['p_purchase_interval_days_std', 'p_is_organic', 'p_std_add_cart_num', 'p_std_first_order_num', 'p_avg_first_order_num',
+                'p_sum_onetime_purchase', 'p_std_first_reorder_diff', 'p_num_purchases_per_user_max', 'p_avg_first_reorder_num']
+    p_low = ['p_std_first_reorder_num', 'p_is_gluten_free', 'p_num_purchases_per_user_q20', 'p_purchase_interval_days_min_woo',
+             'p_num_purchases_per_user_min', 'p_is_asian']
 
-    user_high = fi_group.loc['user_high', 'features']
-    user_middle = fi_group.loc['user_middle', 'features']
-    user_low = fi_group.loc['user_low', 'features']
+    user_high = ['user_reordered_products_per_order', 'user_days_not_purchase', 'user_max_order', 'user_total_orders',
+                 'user_next_order_readiness', 'user_age_days_on_platform', 'user_mean_days_order_interval',
+                 'uo_reorered_products_mean', 'uo_reorder_ratio_mean', 'user_product_unique', 'user_reorder_rate',
+                 'uo_reordered_products_std', 'user_order_freq']
+    user_middle = ['users_organic_ratio', 'uo_unique_aisle_mean', 'uo_unique_department_mean', 'uo_basket_size_mean',
+                   'user_aisle_unique', 'uo_reorder_ratio_std', 'user_product_total', 'users_organic_ratio_r5',
+                   'uo_unique_department_std', 'user_std_days_order_interval', 'user_basket_size_trend_d1', 'uo_unique_aisle_std',
+                   'users_purchases_dow_2', 'user_order_num_sum_exclude_1st', 'user_reorder_prod_total',
+                   'users_purchases_pod_morning', 'user_orders_days_interval_trend', 'users_norm_purchases_dow_0',
+                   'user_mean_order_hour', 'user_department_unique', 'users_purchases_pod_noon', 'users_norm_purchases_dow_6',
+                   'uo_basket_size_std', 'users_purchases_dow_5', 'users_purchases_dow_0','users_purchases_dow_6',
+                   'users_gluten_free_ratio_r5', 'users_norm_purchases_dow_2']
+    user_low = ['user_std_order_dow', 'users_purchases_dow_4', 'users_norm_purchases_dow_3', 'user_basket_size_skew',
+                'users_norm_purchases_pod_morning', 'users_asian_food_ratio', 'users_purchases_pod_midnight', 'users_norm_purchases_dow_1',
+                'users_purchases_pod_night', 'users_gluten_free_ratio', 'users_asian_food_ratio_r5', 'users_purchases_dow_1',
+                'user_std_order_hour', 'users_norm_purchases_pod_night', 'users_norm_purchases_pod_noon', 'users_purchases_dow_3',
+                'users_norm_purchases_dow_4', 'users_norm_purchases_pod_midnight', 'user_mean_order_dow', 'users_norm_purchases_dow_5']
 
-    up_high = fi_group.loc['up_high', 'features']
-    up_middle = fi_group.loc['up_middle', 'features']
-    up_low = fi_group.loc['up_low', 'features']
+    up_high = ['up_num_purchases_r5', 'up_purchase_proba_r5', 'up_purchase_ratio_r5', 'up_purchase_proba', 'up_num_orders_since_last_purchase',
+               'up_purchase_interval_days_mean_r5', 'up_num_purchases_diff_p_q20', 'up_purchase_interval_days_max_r5', 'up_reorder_times',
+               'up_overdue_days_max', 'up_overdue_days_mean', 'up_num_purchases', 'up_num_purchases_diff_p_min', 'up_readiness_p_min_woo',
+               'up_readiness_p_q20', 'up_num_days_not_purchase', 'up_first_order', 'up_overdue_days_min', 'up_aisle_purchase_skew',
+               'up_num_purchases_diff_p_mean', 'up_readiness_p_median', 'up_std_order_num', 'up_num_purchases_diff_p_q80', 'up_readiness_p_q80',
+               'up_purchase_interval_days_min_r5', 'up_readiness_p_max_woo', 'up_cart_order_median', 'up_readiness_p_range',
+               'up_purchase_interval_days_median', 'up_purchase_readiness', 'up_purchase_interval_days_median_r5', 'up_purchase_interval_days_max',
+               'up_cart_order_mean', 'up_mean_order_num', 'up_purchase_interval_days_mean', 'up_readiness_p_mean']
+    up_middle = ['up_cart_order_sum', 'up_purchase_interval_days_min', 'up_subsitute_num_purchases_r5', 'up_purchases_pod_morning',
+                 'up_cart_order_min', 'up_purchases_dow_3', 'up_last_order', 'up_aisle_purchase_trend_d1', 'up_norm_purchases_pod_morning',
+                 'up_purchases_dow_2', 'up_num_purchases_diff_p_max', 'up_organic_substitute_num_purchases', 'up_department_purchase_skew']
+    up_low = ['up_substitute_num_purchases', 'up_norm_purchases_dow_5', 'up_purchases_pod_midnight',
+              'up_purchases_dow_4', 'up_purchases_dow_5', 'up_purchases_dow_0', 'up_norm_purchases_pod_midnight',
+              'up_purchases_dow_1', 'up_cart_order_max', 'up_norm_purchases_pod_noon', 'up_cart_order_std', 'up_norm_purchases_pod_night',
+              'up_purchases_pod_night', 'up_department_purchase_trend_d1', 'up_purchases_dow_6', 'up_norm_purchases_dow_4', 'up_norm_purchases_dow_3',
+              'up_norm_purchases_dow_0', 'up_norm_purchases_dow_2', 'up_purchases_pod_noon', 'up_norm_purchases_dow_1', 'up_norm_purchases_dow_6',
+              'up_organic_substitute_num_purchases_r5']
 
-    # assert len(p_high + p_middle + user_high + user_middle + up_high + up_middle + p_low + user_low + up_low) == 165
-    to_keep = p_high + p_middle + user_high + user_middle + up_high + up_middle
+    if keep_high_mid_fi:
+        # assert len(p_high + p_middle + user_high + user_middle + up_high + up_middle + p_low + user_low + up_low) == 165
+        to_keep = p_high + p_middle + user_high + user_middle + up_high + up_middle
+    elif keep_high_fi:
+        to_keep = p_high + user_high + up_high
     return df[to_keep]
 
 
