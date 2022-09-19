@@ -48,7 +48,7 @@ users_2 = prior_order_details.groupby('user_id').agg({'product_id': ['count', 'n
                                                       'aisle': ['nunique'],
                                                       'department': ['nunique'],
                                                       'reordered': 'sum',
-                                                      'order_number': lambda x: sum(x > 1)})
+                                                      })
 
 users_2.columns = users_2.columns.get_level_values(0) + '_' + users_2.columns.get_level_values(1)
 
@@ -57,7 +57,6 @@ users_2.rename(columns={'product_id_count': 'user_product_total',
                         'aisle_nunique': 'user_aisle_unique',
                         'department_nunique': 'user_department_unique',
                         'reordered_sum': 'user_reorder_prod_total',
-                        'order_number_<lambda>': 'user_order_num_sum_exclude_1st'
                         }, inplace=True)
 
 users_2.reset_index(inplace=True)
