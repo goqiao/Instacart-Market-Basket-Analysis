@@ -235,7 +235,7 @@ def keep_top_features(df, keep_high_mid_fi=True, keep_high_fi=False):
     user_high = ['user_reordered_products_per_order', 'user_days_not_purchase', 'user_max_order', 'user_total_orders',
                  'user_next_order_readiness', 'user_age_days_on_platform', 'user_mean_days_order_interval',
                  'uo_reorered_products_mean', 'uo_reorder_ratio_mean', 'user_product_unique', 'user_reorder_rate',
-                 'uo_reordered_products_std', 'user_order_freq']
+                 'uo_reordered_products_std', 'user_order_freq_days_mean']
     user_middle = ['users_organic_ratio', 'uo_unique_aisle_mean', 'uo_unique_department_mean', 'uo_basket_size_mean',
                    'user_aisle_unique', 'uo_reorder_ratio_std', 'user_product_total', 'users_organic_ratio_r5',
                    'uo_unique_department_std', 'user_std_days_order_interval', 'user_basket_size_trend_d1', 'uo_unique_aisle_std',
