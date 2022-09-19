@@ -239,7 +239,7 @@ def keep_top_features(df, keep_high_mid_fi=True, keep_high_fi=False):
     user_middle = ['users_organic_ratio', 'uo_unique_aisle_mean', 'uo_unique_department_mean', 'uo_basket_size_mean',
                    'user_aisle_unique', 'uo_reorder_ratio_std', 'user_product_total', 'users_organic_ratio_r5',
                    'uo_unique_department_std', 'user_std_days_order_interval', 'user_basket_size_trend_d1', 'uo_unique_aisle_std',
-                   'users_purchases_dow_2', 'user_order_num_sum_exclude_1st', 'user_reorder_prod_total',
+                   'users_purchases_dow_2', 'user_reorder_prod_total',
                    'users_purchases_pod_morning', 'user_orders_days_interval_trend', 'users_norm_purchases_dow_0',
                    'user_mean_order_hour', 'user_department_unique', 'users_purchases_pod_noon', 'users_norm_purchases_dow_6',
                    'uo_basket_size_std', 'users_purchases_dow_5', 'users_purchases_dow_0','users_purchases_dow_6',
