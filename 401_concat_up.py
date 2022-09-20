@@ -35,12 +35,13 @@ def make_data(data_folder='data', make_set='train'):
     users_organic_purchases = pd.read_pickle('{}/users_organic_purchases.pickle'.format(data_folder))
     users_organic_purchases_r5 = pd.read_pickle('{}/users_organic_purchases_r5.pickle'.format(data_folder))
     users_order_time = pd.read_pickle('{}/users_order_time.pickle'.format(data_folder))
+    users_cluster = pd.read_pickle('{}/user_kmeans_cluster.pickle'.format(data_folder))
 
     product_features_basic_agg = pd.read_pickle('{}/product_features_basic_agg.pickle'.format(data_folder))
     product_organic_features = pd.read_pickle('{}/product_organic_features.pickle'.format(data_folder))
     products_purchases_features = pd.read_pickle('{}/products_purchases_features.pickle'.format(data_folder))
     product_purchase_cycle = pd.read_pickle('{}/product_purchase_cycle.pickle'.format(data_folder))
-    # products_embedding = pd.read_pickle('{}/word2vec_prods_embedding.pickle'.format(data_folder))
+    products_embedding = pd.read_pickle('{}/word2vec_prods_embedding_renamed.pickle'.format(data_folder))
 
     if make_set == 'train':
         # get train users <user_id, order_id, product_id, reordered>
@@ -103,6 +104,7 @@ def make_data(data_folder='data', make_set='train'):
     data_full_features = data_full_features.merge(users_organic_purchases, on='user_id', how='left')
     data_full_features = data_full_features.merge(users_organic_purchases_r5, on='user_id', how='left')
     data_full_features = data_full_features.merge(users_order_time, on='user_id', how='left')
+    data_full_features = data_full_features.merge(users_cluster, on='user_id', how='left')
 
     # data_full_features = data_full_features.merge(product_features[selected_product_features], on='product_id',
     #                                               how='inner')
@@ -116,7 +118,7 @@ def make_data(data_folder='data', make_set='train'):
     data_full_features = data_full_features.merge(product_purchase_cycle, on='product_id', how='left')
     data_full_features = data_full_features.merge(product_organic_features, on='product_id', how='left')
 
-    # data_full_features = data_full_features.merge(products_embedding, on='product_id', how='left')
+    data_full_features = data_full_features.merge(products_embedding, on='product_id', how='left')
 
     print('merge5 done')
     gc.collect(); del products_purchases_features
