@@ -18,11 +18,11 @@ substitutes_name = [('Large Brown Eggs','Organic Large Brown Grade AA Cage Free 
                         ('Green Seedless Grapes','Grape White/Green Seedless'),
                         ('Organic Large Grade AA Brown Eggs','Large Brown Eggs'),
                         ('Organic Broccoli','Organic Broccoli Crowns'),
-                        ('Banana','Organic Banana'),
+                        # ('Banana','Organic Banana'),
                         # ('Organic Reduced Fat Milk','Organic Reduced Fat Milk'),
                         ('Banana','Bag of Organic Bananas'),
                         ('Half And Half Cream','Organic Half & Half'),
-                        ('Strawberries','Organic Strawberries')
+                        # ('Strawberries','Organic Strawberries')
 ]
 substitutes_id = [(products.set_index('product_name').at[l[0], 'product_id'],
                          products.set_index('product_name').at[l[1], 'product_id']) for l in substitutes_name]
