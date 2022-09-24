@@ -1,6 +1,6 @@
 import pandas as pd
 import time
-from _max_f1 import get_best_prediction
+from max_f1 import get_best_prediction
 import concurrent.futures
 from utils import print_eval_metrics
 pd.set_option('display.max_columns', None)

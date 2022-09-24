@@ -3,7 +3,6 @@ import joblib
 import time
 import xgboost
 pd.set_option('display.max_columns', None)
-from _threshold_exploration import f1_maximization
 from utils import keep_top_features
 
 start_time = time.time()
