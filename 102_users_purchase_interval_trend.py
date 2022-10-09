@@ -7,6 +7,9 @@ pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 from utils import trend_d1
 
+"""
+user order more/less frequently?
+"""
 # parameters:
 start_time = time.time()
 data_folder = 'data'
