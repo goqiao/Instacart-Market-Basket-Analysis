@@ -1,14 +1,14 @@
 import pandas as pd
-import numpy as np
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
+
 
 # parameters:
 data_folder = 'data'
 nrows = None
 
 prior_order_details = pd.read_pickle('{}/prior_order_details.pickle'.format(data_folder))[['user_id', 'product_id', 'last_nth_order']]
-product_features = pd.read_pickle('{}/product_organic_features.pickle'.format(data_folder))[
+product_features = pd.read_pickle('{}/product_special_features.pickle'.format(data_folder))[
                                         ['product_id', 'p_is_organic', 'p_is_gluten_free', 'p_is_asian']]
 prior_order_details = prior_order_details.merge(product_features, how='left')
 

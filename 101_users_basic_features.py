@@ -61,9 +61,6 @@ users_2.rename(columns={'product_id_count': 'user_product_total',
 
 users_2.reset_index(inplace=True)
 
-# TODO: _user_reorder_ratio doesn't make sense?
-# users_2['user_reorder_ratio'] = users_2['user_reorder_prod_total'] / users_2['user_order_num_sum_exclude_1st']
-
 # create feature _user_days_not_purchase
 users_2 = users_2.merge(orders.loc[orders['eval_set'] != 'prior', ['user_id', 'days_since_prior_order']],
                         how='left').rename(columns={'days_since_prior_order': 'user_days_not_purchase'})
@@ -85,7 +82,7 @@ users_3.rename(columns={'product_id_count_mean': 'uo_basket_size_mean',
                         'aisle_nunique_std': 'uo_unique_aisle_std',
                         'department_nunique_mean': 'uo_unique_department_mean',
                         'department_nunique_std': 'uo_unique_department_std',
-                        'reordered_sum_mean': 'uo_reorered_products_mean',
+                        'reordered_sum_mean': 'uo_reordered_products_mean',
                         'reordered_sum_std': 'uo_reordered_products_std',
                         'reordered_mean_mean': 'uo_reorder_ratio_mean',
                         'reordered_mean_std': 'uo_reorder_ratio_std'}, inplace=True)
@@ -94,22 +91,10 @@ users_3.reset_index(inplace=True)
 # merge users level features
 users_features = users_1.merge(users_2).merge(users_3)
 
-# _user_unique_product_rate: _user_basket_diversity
-# users_features['_user_unique_product_rate'] = users_features['_user_product_unique'] / users_features[
-#     '_user_product_total']
-
-# _user_repeat_purchase_rate is duplicate with _user_reorder_rate
-# users_features['_user_repeat_purchase_rate'] = (users_features['_user_product_total'] -
-#                                                 users_features['_user_product_unique']) / users_features['_user_product_total']
 users_features['user_reorder_rate'] = users_features['user_reorder_prod_total'] / users_features[
     'user_product_total']
 
-# duplicate with uo_reordered_products_mean
-# users_features['user_reordered_products_per_order'] = users_features['user_reorder_prod_total']/users_features['user_total_orders']
-
-# users_features['_user_mean_order_size'] = users_features['_user_product_total'] / users_features['_user_total_orders']
 users_features['user_next_order_readiness'] = users_features['user_days_not_purchase'] - users_features['user_mean_days_order_interval']
-# TODO: check corr between user_order_freq and user_mean_days_order_interval
 users_features['user_order_freq_days_mean'] = users_features['user_age_days_on_platform']/users_features['user_total_orders']
 
 users_features.to_pickle('{}/users_features.pickle'.format(data_folder))

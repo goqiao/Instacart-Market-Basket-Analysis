@@ -19,12 +19,11 @@ def make_data(data_folder='data', make_set='train'):
     up_purchase_r5 = pd.read_pickle('data/up_purchase_r5.pickle').set_index(idx_cols)
     up_days_since_last_purchase = pd.read_pickle('data/up_days_since_last_purchase.pickle').set_index(idx_cols)
     up_days_since_last_purchase_r5 = pd.read_pickle('data/up_days_since_last_purchase_r5.pickle').set_index(idx_cols)
-    up_purchase_proba = pd.read_pickle('data/up_purchase_proba.pickle').set_index(idx_cols)
-    up_purchase_proba_r5 = pd.read_pickle('data/up_purchase_proba_r5.pickle').set_index(idx_cols)
+    up_reorder_tendency_proba = pd.read_pickle('data/up_reorder_tendency_proba.pickle').set_index(idx_cols)
+    up_reorder_tendency_proba_r5 = pd.read_pickle('data/up_reorder_tendency_proba_r5.pickle').set_index(idx_cols)
     up_days_not_purchase = pd.read_pickle('data/up_days_not_purchase.pickle').set_index(idx_cols)
     up_aisles_purchase_trend = pd.read_pickle('data/up_aisles_purchase_trend.pickle').set_index(idx_cols)
     up_departments_purchase_trend = pd.read_pickle('data/up_departments_purchase_trend.pickle').set_index(idx_cols)
-    # up_substitute_purchase = pd.read_pickle('data/up_substitute_purchase.pickle').set_index(idx_cols)
     up_organic_substitute_purchase = pd.read_pickle('data/up_organic_substitute_purchase.pickle').set_index(idx_cols)
     up_order_time = pd.read_pickle('data/up_order_time.pickle').set_index(idx_cols)
     up_word2vec_substitute_purchase = pd.read_pickle('data/up_word2vec_substitute_purchase.pickle').set_index(idx_cols)
@@ -39,7 +38,6 @@ def make_data(data_folder='data', make_set='train'):
     users_organic_purchases = pd.read_pickle('data/users_organic_purchases.pickle').set_index(idx_cols)
     users_organic_purchases_r5 = pd.read_pickle('data/users_organic_purchases_r5.pickle').set_index(idx_cols)
     users_order_time = pd.read_pickle('data/users_order_time.pickle').set_index(idx_cols)
-    # users_cluster = pd.read_pickle('data/user_kmeans_cluster.pickle').set_index(idx_cols)
 
     idx_cols = ['product_id']
     product_features_basic_agg = pd.read_pickle('data/product_features_basic_agg.pickle').set_index(idx_cols)
@@ -60,7 +58,6 @@ def make_data(data_folder='data', make_set='train'):
 
     # add reordered label to the train data
     data_full_features = base.join(up_agg, on=['user_id', 'product_id'], how='left').drop('eval_set', axis=1)
-    print(data_full_features.index.nunique())
 
     print('join1')
     # attach all features to the unique user_id and product_id tuple
@@ -77,12 +74,11 @@ def make_data(data_folder='data', make_set='train'):
                                                   how='left')
     del up_days_since_last_purchase_r5
     print('join4')
-    data_full_features = data_full_features.join(up_purchase_proba, on=['user_id', 'product_id'], how='left')
-    data_full_features = data_full_features.join(up_purchase_proba_r5, on=['user_id', 'product_id'], how='left')
+    data_full_features = data_full_features.join(up_reorder_tendency_proba, on=['user_id', 'product_id'], how='left')
+    data_full_features = data_full_features.join(up_reorder_tendency_proba_r5, on=['user_id', 'product_id'], how='left')
     data_full_features = data_full_features.join(up_days_not_purchase, on=['user_id', 'product_id'], how='left')
     data_full_features = data_full_features.join(up_aisles_purchase_trend, on=['user_id', 'product_id'], how='left')
     data_full_features = data_full_features.join(up_departments_purchase_trend, on=['user_id', 'product_id'], how='left')
-    # data_full_features = data_full_features.join(up_substitute_purchase, on=['user_id', 'product_id'], how='left')
     data_full_features = data_full_features.join(up_organic_substitute_purchase, on=['user_id', 'product_id'], how='left')
     data_full_features = data_full_features.join(up_order_time, on=['user_id', 'product_id'], how='left')
     data_full_features = data_full_features.join(up_word2vec_substitute_purchase, on=['user_id', 'product_id'], how='left')
@@ -100,14 +96,13 @@ def make_data(data_folder='data', make_set='train'):
     
     # release memory
     gc.collect()
-    del up_purchase_proba, up_purchase_proba_r5, up_days_not_purchase, up_aisles_purchase_trend, up_departments_purchase_trend,
+    del up_reorder_tendency_proba, up_reorder_tendency_proba_r5, up_days_not_purchase, up_aisles_purchase_trend, up_departments_purchase_trend,
     up_organic_substitute_purchase, up_order_time, up_word2vec_substitute_purchase, up_word2vec_substitute_purchase_07, up_purchase_interval_trend,
     up_order_interval
     del users_features, users_basket_size_trend, users_orders_interval_trend, users_organic_purchases, users_organic_purchases_r5, users_order_time
 
     # optimize data types
     data_full_features = improve_data_type(data_full_features)
-
 
     print('join5')
     data_full_features = data_full_features.join(product_features_basic_agg, on='product_id', how='left')

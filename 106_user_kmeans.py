@@ -1,10 +1,8 @@
 import pandas as pd
-import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt
-pd.set_option('display.max_columns', None)
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
+
 
 # get user basic features
 users_basic = pd.read_pickle('data/users_features.pickle').drop(['user_days_not_purchase', 'user_next_order_readiness'], axis=1)

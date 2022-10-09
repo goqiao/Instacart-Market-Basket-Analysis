@@ -2,8 +2,7 @@ import xgboost
 import pandas as pd
 import time
 import mlflow
-import pickle
-from utils import keep_top_gain_features
+from utils import custom_refcv_drop, custom_refcv_drop_2
 from sklearn.model_selection import GroupKFold
 
 """
@@ -15,25 +14,17 @@ data_folder = 'data'
 sample_frac = 0.4
 
 experiment_name = 'Instacart CV'
-run_name = 'select top gain features 143 + substitution features, frac 0.4'
+run_name = '- high_corr custom refcv, 95 features + up order interval (6) + trend in purchase interval(2) + order interval readiness(3), + p_order_interval(12) frac 0.4'
 
 
 # data
 data_full_features = pd.read_pickle('{}/train_full_features.pickle'.format(data_folder))
 
-## substitues features
-data_folder = 'data'
-index_cols = ['user_id', 'product_id']
-up_word2vec_substitute_purchase = pd.read_pickle('{}/up_word2vec_substitute_purchase.pickle'.format(data_folder)).set_index(index_cols)
-up_word2vec_substitute_purchase_07 = pd.read_pickle('{}/up_word2vec_substitute_purchase_07.pickle'.format(data_folder)).set_index(index_cols)
-product_sub_stats = pd.read_pickle('{}/product_sub_stats.pickle'.format(data_folder)).set_index('product_id')
-product_sub_stats.drop('p_num_substitute', axis=1, inplace=True)
-# print(product_sub_stats.head(1))
 
-data_full_features = data_full_features.merge(up_word2vec_substitute_purchase, how='left', left_on=index_cols, right_index=True)
-data_full_features = data_full_features.merge(up_word2vec_substitute_purchase_07, how='left', left_on=index_cols, right_index=True)
-data_full_features = data_full_features.merge(product_sub_stats, how='left', left_on='product_id', right_index=True)
-# print(data_full_features.iloc[:2, -8:])
+# up_order_interval = pd.read_pickle('data/up_orders_interval.pickle')
+# data_full_features = data_full_features.merge(up_order_interval, how='left'
+#                         , left_on=['user_id', 'product_id'], right_index=True)
+
 
 data_full_features = data_full_features.sample(frac=sample_frac, random_state=1).reset_index(drop=True)
 X = data_full_features.drop('reordered', axis=1)
@@ -42,11 +33,13 @@ y = data_full_features['reordered']
 drop_cols = ['order_id', 'user_id', 'product_id']
 X = X.drop(columns=drop_cols)
 
-X = keep_top_gain_features(X)
-print(1111)
-print (X.shape)
+X = custom_refcv_drop(X)
+X = custom_refcv_drop_2(X)
 
-# spliter
+assert X.shape[1] == 118
+
+
+# splitter
 cv_split_base = data_full_features['user_id']
 gkf = GroupKFold(n_splits=5).split(X, y, groups=cv_split_base)
 del data_full_features

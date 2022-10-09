@@ -1,12 +1,12 @@
 import pandas as pd
 import time
 
+
 start_time = time.time()
 data_folder = 'data'
 nrows = None
 
 up_purchase_time = pd.read_pickle('{}/days_since_last_purchase.pickle'.format(data_folder))
-# up_purchase_time = up_purchase_time.loc[up_purchase_time.user_id.isin([1, 3])]
 
 up_purchase_time = up_purchase_time.drop_duplicates(['user_id', 'product_id'], keep='last')[['user_id', 'product_id', 'nth_day_since_customer']]
 

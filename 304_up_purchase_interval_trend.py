@@ -1,15 +1,7 @@
 import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
-import pickle
-import gc
 import time
-
-pd.set_option('display.max_colwidth', None)
-from matplotlib import rcParams
-rcParams.update({'figure.autolayout': True})
 from utils import trend_d1, skewness
+
 
 # parameters:
 start_time = time.time()
@@ -23,3 +15,7 @@ up_time = up_purchase_time.groupby(key).agg({'_up_days_since_last_purchase': [li
 up_time.columns = ['up_purchase_interval', 'up_purchase_interval_mean', 'up_purchase_interval_trend_d1', 'up_purchase_interval_skewness']
 
 up_time[['up_purchase_interval_trend_d1', 'up_purchase_interval_skewness']].to_pickle('data/up_purchase_interval_trend.pickle')
+
+
+end_time = time.time()
+print('code using {:.2f} mins'.format((end_time - start_time) / 60))

@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
 import time
-import seaborn as sns
-import matplotlib.pyplot as plt
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 from utils import trend_d1
@@ -13,7 +11,6 @@ user order more/less frequently?
 # parameters:
 start_time = time.time()
 data_folder = 'data'
-nrows = None
 
 orders = pd.read_pickle('data/orders.pickle')
 orders = orders.loc[~orders['days_since_prior_order'].isnull(), ]

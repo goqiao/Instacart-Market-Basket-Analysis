@@ -1,16 +1,11 @@
-import pandas as pd
-import numpy as np
 import time
-import seaborn as sns
-import matplotlib.pyplot as plt
+import pandas as pd
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
-from utils import download_user_order_history, read_data
+
 
 start_time = time.time()
 data_folder = 'data'
-nrows = None
-
 
 orders = pd.read_pickle('data/orders.pickle')[['order_id', 'user_id', 'order_dow', 'part_of_day']]
 prior_order_details = pd.read_pickle('data/prior_order_details.pickle')[['order_id', 'user_id', 'product_id']]

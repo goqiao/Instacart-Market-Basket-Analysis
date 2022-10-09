@@ -1,37 +1,36 @@
-import numpy as np
 import xgboost
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 import joblib
-from utils import split_data, print_eval_metrics, save_fig_with_timestamp
+from utils import split_data, custom_refcv_drop, custom_refcv_drop_2
 import matplotlib.pyplot as plt
 import time
 import mlflow
-from utils import keep_top_features
+import gc
 
-# takes 18 mins
+# takes 17 mins
 start_time = time.time()
 if __name__ == '__main__':
-    print(1)
     # experiment setting
     experiment_name = 'Instacart'
-    run_name = 'added feature selection, keep top features, 0.6'
+    run_name = '- high_corr custom refcv, 95 features + order interval (6) + trend in purchase interval(2) + order interval readiness(3) , frac 0.4'
 
     data_folder = 'data'
-    sample_frac = 0.55
+    sample_frac = 0.6
     test_size = 0.2
     scaling = False
     data_full_features = pd.read_pickle('{}/train_full_features.pickle'.format(data_folder))
     print('train set BEFORE sampling:')
     print(data_full_features.shape)
-    print(2)
-    # use part of the data for speed
+    # use part of the data for speed and memory
     data_full_features = data_full_features.sample(frac=sample_frac, random_state=0).reset_index(drop=True)
     print('train set AFTER sampling:')
     print(data_full_features.shape)
-    print(3)
     X_train, X_val, y_train, y_val = split_data(data_full_features, test_size=test_size, data_folder=data_folder,
                                                 split_by='user_id')
+
+    # release memory
+    gc.collect; del data_full_features
 
     print(y_train.value_counts(dropna=False))
     print(y_val.value_counts(dropna=False))
@@ -54,12 +53,19 @@ if __name__ == '__main__':
     X_val.to_pickle('{}/X_val.pickle'.format(data_folder))
     y_val.to_pickle('{}/y_val.pickle'.format(data_folder))
 
-    drop_cols =['order_id', 'user_id', 'product_id']
+    drop_cols = ['order_id', 'user_id', 'product_id']
     X_train = X_train.drop(columns=drop_cols)
     X_val = X_val.drop(columns=drop_cols)
 
-    X_train = keep_top_features(X_train)
-    X_val = keep_top_features(X_val)
+    # feature selection
+    X_train = custom_refcv_drop(X_train)
+    X_val = custom_refcv_drop(X_val)
+
+    X_train = custom_refcv_drop_2(X_train)
+    X_val = custom_refcv_drop_2(X_val)
+
+    print ('X_train Shape: ', X_train.shape)
+    assert X_train.columns.nunique() == 118
 
     xgb_params = {
         'n_estimators': 1000
@@ -74,13 +80,13 @@ if __name__ == '__main__':
         , "alpha": 2e-05
         , "lambda": 10
         , "tree_method": 'hist'
-        , "early_stopping_rounds": 30
+        , "early_stopping_rounds": 100
         , "random_state": 19
+        , "predictor": 'cpu_predictor'
     }
     print(4)
     bst = xgboost.XGBClassifier(**xgb_params)
     bst.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)], verbose=True)
-
 
     # access performance
     num_best_ntrees = bst.best_ntree_limit
@@ -104,20 +110,11 @@ if __name__ == '__main__':
     fig = plt.figure(figsize=(25, 20))
     plt.barh(feature_importance['features'], feature_importance['importance'])
     plt.tight_layout()
-    # save_fig_with_timestamp('XGB-feature-importance')
-    # plt.show();  # seem to cause freeze
-
-    # CV takes some time
-    # from sklearn.model_selection import cross_val_score
-    #
-    # cv_scores = cross_val_score(xgboost.XGBClassifier(**xgb_params), X_train_scaled, y_train, cv=5, scoring='roc_auc')
-    # cv_scores_avg = np.average(cv_scores)
 
 
     end_time = time.time()
-    time_spent = (end_time - start_time)/60
+    time_spent = (end_time - start_time) / 60
     print('spent {:.2f} mins'.format(time_spent))
-
 
     # start logging
     try:
@@ -128,6 +125,7 @@ if __name__ == '__main__':
     with mlflow.start_run(experiment_id=exp_id, run_name=run_name):
         mlflow.log_params(xgb_params)
         mlflow.log_params({'num_best_ntrees': num_best_ntrees})
+        mlflow.log_params({'num_features': X_train.shape[1]})
         mlflow.log_params({'sample_frac': sample_frac, 'test_size': test_size})
         mlflow.log_metrics({'train_logloss': train_logloss, 'val_logloss': val_logloss, 'train_auc': train_auc,
                             'val_auc': val_auc, 'duration_mins': time_spent})
@@ -136,4 +134,3 @@ if __name__ == '__main__':
         # logging this file is easy to out of memory
         # mlflow.log_artifact('{}/train_full_features.pickle'.format(data_folder))
         mlflow.log_artifact('{}/up_feature_importance.csv'.format(data_folder))
-

@@ -1,16 +1,13 @@
 import pandas as pd
-import numpy as np
 import time
-import seaborn as sns
-import matplotlib.pyplot as plt
+from utils import trend_d1, skew
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
-from utils import trend_d1, skew
+
 
 # parameters:
 start_time = time.time()
 data_folder = 'data'
-nrows = None
 
 prior = pd.read_pickle('data/prior_order_details.pickle')
 orders = prior[['user_id', 'order_id', 'order_number', 'days_since_prior_order']].drop_duplicates()

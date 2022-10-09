@@ -1,13 +1,15 @@
 import pandas as pd
-from utils import read_data
 import time
-pd.set_option('display.max_rows', None)
-pd.set_option('display.max_columns', None)
+
 
 # parameters:
 start_time = time.time()
 data_folder = 'data'
 nrows = None
+
+"""
+features used in the final prediction
+"""
 
 prior_order_details = pd.read_pickle('{}/prior_order_details.pickle'.format(data_folder))
 
