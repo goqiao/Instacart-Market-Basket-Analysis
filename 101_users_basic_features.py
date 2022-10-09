@@ -103,7 +103,9 @@ users_features = users_1.merge(users_2).merge(users_3)
 #                                                 users_features['_user_product_unique']) / users_features['_user_product_total']
 users_features['user_reorder_rate'] = users_features['user_reorder_prod_total'] / users_features[
     'user_product_total']
-users_features['user_reordered_products_per_order'] = users_features['user_reorder_prod_total']/users_features['user_total_orders']
+
+# duplicate with uo_reordered_products_mean
+# users_features['user_reordered_products_per_order'] = users_features['user_reorder_prod_total']/users_features['user_total_orders']
 
 # users_features['_user_mean_order_size'] = users_features['_user_product_total'] / users_features['_user_total_orders']
 users_features['user_next_order_readiness'] = users_features['user_days_not_purchase'] - users_features['user_mean_days_order_interval']
