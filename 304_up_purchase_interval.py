@@ -35,10 +35,9 @@ orders_r5 = prior_order_details[prior_order_details['last_nth_order'].isin(np.ar
 up_purchase_time_r5 = up_purchase_time.loc[up_purchase_time.order_id.isin(orders_r5)]
 
 key = ['user_id', 'product_id']
-up_r5 = up_purchase_time_r5.groupby(key)['_up_days_since_last_purchase'].mean().to_frame()
-up_r5.columns = ['up_purchase_interval_days_mean_r5']
+up_r5 = up_purchase_time_r5.groupby(key)['_up_days_since_last_purchase'].median().to_frame()
+up_r5.columns = ['up_purchase_interval_days_median_r5']
 
-up_r5['up_purchase_interval_days_median_r5'] = up_purchase_time_r5.groupby(key)['_up_days_since_last_purchase'].median()
 up_r5['up_purchase_interval_days_max_r5'] = up_purchase_time_r5.groupby(key)['_up_days_since_last_purchase'].max()
 up_r5['up_purchase_interval_days_min_r5'] = up_purchase_time_r5.groupby(key)['_up_days_since_last_purchase'].min()
 
