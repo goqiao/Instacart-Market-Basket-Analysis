@@ -5,7 +5,7 @@
 import numpy as np
 from operator import itemgetter
 
-'''
+"""
 This kernel implements the O(n²) F1-Score expectation maximization algorithm presented in
 "Ye, N., Chai, K., Lee, W., and Chieu, H.  Optimizing F-measures: A Tale of Two Approaches. In ICML, 2012."
 
@@ -13,10 +13,10 @@ It solves argmax_(0 <= k <= n,[[None]]) E[F1(P,k,[[None]])]
 with [[None]] being the indicator for predicting label "None"
 given posteriors P = [p_1, p_2, ... , p_n], where p_1 > p_2 > ... > p_n
 under label independence assumption by means of dynamic programming in O(n²).
-'''
+"""
 
 
-class F1Optimizer():
+class F1Optimizer:
     def __init__(self):
         pass
 
@@ -37,13 +37,15 @@ class F1Optimizer():
         for i in range(1, n + 1):
             DP_C[i, i] = DP_C[i - 1, i - 1] * P[i - 1]
             for j in range(i + 1, n + 1):
-                DP_C[i, j] = P[j - 1] * DP_C[i - 1, j - 1] + (1.0 - P[j - 1]) * DP_C[i, j - 1]
+                DP_C[i, j] = (
+                    P[j - 1] * DP_C[i - 1, j - 1] + (1.0 - P[j - 1]) * DP_C[i, j - 1]
+                )
 
         DP_S = np.zeros((2 * n + 1,))
         DP_SNone = np.zeros((2 * n + 1,))
         for i in range(1, 2 * n + 1):
-            DP_S[i] = 1. / (1. * i)
-            DP_SNone[i] = 1. / (1. * i + 1)
+            DP_S[i] = 1.0 / (1.0 * i)
+            DP_SNone[i] = 1.0 / (1.0 * i + 1)
         for k in range(n + 1)[::-1]:
             f1 = 0
             f1None = 0
@@ -75,8 +77,12 @@ class F1Optimizer():
 
     @staticmethod
     def _Fbeta(tp, fp, fn, beta=1.0):
-        beta_squared = beta ** 2
-        return (1.0 + beta_squared) * tp / ((1.0 + beta_squared) * tp + fp + beta_squared * fn)
+        beta_squared = beta**2
+        return (
+            (1.0 + beta_squared)
+            * tp
+            / ((1.0 + beta_squared) * tp + fp + beta_squared * fn)
+        )
 
 
 def get_best_prediction(items, preds, pNone=None):
@@ -87,16 +93,13 @@ def get_best_prediction(items, preds, pNone=None):
     L = [i for i, p in items_preds]
 
     opt = F1Optimizer.maximize_expectation(P, pNone)
-    best_prediction = ['None'] if opt[1] else []
-    best_prediction += (L[:opt[0]])
+    best_prediction = ["None"] if opt[1] else []
+    best_prediction += L[: opt[0]]
     #    f1_max = opt[2]
 
     #    print("Prediction {} yields best E[F1] of {}\n".format(best_prediction, f1_max))
-    return ' '.join(list(map(str, best_prediction)))
+    return " ".join(list(map(str, best_prediction)))
 
 
-if __name__ == '__main__':
-    get_best_prediction(['a', 'b'], [0.9, 0.3], 0.5)
-
-
-
+if __name__ == "__main__":
+    get_best_prediction(["a", "b"], [0.9, 0.3], 0.5)
