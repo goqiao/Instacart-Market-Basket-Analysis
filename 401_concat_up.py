@@ -238,7 +238,7 @@ def make_data(data_folder="data", make_set="train"):
 
     # create extra features
     df_temp = pd.DataFrame()
-    data_full_features["num_orders_not_purchase"] = (
+    data_full_features["up_num_orders_not_purchase"] = (
         data_full_features["user_total_orders"] - data_full_features["up_last_order"]
     )
 
@@ -265,15 +265,15 @@ def make_data(data_folder="data", make_set="train"):
 
     # compared with users's own order interval
     df_temp["up_overdue_orders_diff_mean_vs_self"] = (
-        data_full_features["num_orders_not_purchase"]
+        data_full_features["up_num_orders_not_purchase"]
         - data_full_features["up_mean_order_interval"]
     )
     df_temp["up_overdue_orders_diff_max_vs_self"] = (
-        data_full_features["num_orders_not_purchase"]
+        data_full_features["up_num_orders_not_purchase"]
         - data_full_features["up_max_order_interval"]
     )
     df_temp["up_overdue_orders_diff_min_vs_self"] = (
-        data_full_features["num_orders_not_purchase"]
+        data_full_features["up_num_orders_not_purchase"]
         - data_full_features["up_min_order_interval"]
     )
 
@@ -282,13 +282,13 @@ def make_data(data_folder="data", make_set="train"):
         data_full_features["up_num_days_not_purchase"]
         - data_full_features["p_purchase_interval_days_median"]
     )
-    df_temp["up_overdue_days_diff_q20_vs_others"] = (
+    df_temp["up_overdue_days_diff_p20_vs_others"] = (
         data_full_features["up_num_days_not_purchase"]
-        - data_full_features["p_purchase_interval_days_q20"]
+        - data_full_features["p_purchase_interval_days_p20"]
     )
-    df_temp["up_overdue_days_diff_q80_vs_others"] = (
+    df_temp["up_overdue_days_diff_p80_vs_others"] = (
         data_full_features["up_num_days_not_purchase"]
-        - data_full_features["p_purchase_interval_days_q80"]
+        - data_full_features["p_purchase_interval_days_p80"]
     )
     df_temp["up_overdue_days_diff_max_vs_others"] = (
         data_full_features["up_num_days_not_purchase"]
@@ -307,23 +307,23 @@ def make_data(data_folder="data", make_set="train"):
     ).replace(np.inf, np.nan)
     # compared with other people's order interval
     df_temp["up_overdue_orders_diff_mean_vs_others"] = (
-        data_full_features["num_orders_not_purchase"]
+        data_full_features["up_num_orders_not_purchase"]
         - data_full_features["p_order_interval_mean"]
     )
     df_temp["up_overdue_orders_diff_median_vs_others"] = (
-        data_full_features["num_orders_not_purchase"]
+        data_full_features["up_num_orders_not_purchase"]
         - data_full_features["p_order_interval_median"]
     )
     df_temp["up_overdue_orders_diff_max_vs_others"] = (
-        data_full_features["num_orders_not_purchase"]
+        data_full_features["up_num_orders_not_purchase"]
         - data_full_features["p_order_interval_max_woo"]
     )
     df_temp["up_overdue_orders_diff_min_vs_others"] = (
-        data_full_features["num_orders_not_purchase"]
+        data_full_features["up_num_orders_not_purchase"]
         - data_full_features["p_order_interval_min_woo"]
     )
     df_temp["up_overdue_orders_percent_diff_range_vs_others"] = (
-        data_full_features["num_orders_not_purchase"]
+        data_full_features["up_num_orders_not_purchase"]
         - (
             data_full_features["p_order_interval_max_woo"]
             - data_full_features["p_order_interval_min_woo"]
@@ -340,14 +340,14 @@ def make_data(data_folder="data", make_set="train"):
         - data_full_features["p_num_purchases_per_user_max"]
     )
     # df_temp['up_num_purchases_diff_p_min'] = data_full_features['up_num_purchases'] - data_full_features[
-    #     'p_num_purchases_per_user_min']  # highly correlated with up_num_purchases_diff_p_q20
-    df_temp["up_num_purchases_diff_p_q20"] = (
+    #     'p_num_purchases_per_user_min']  # highly correlated with up_num_purchases_diff_p_p20
+    df_temp["up_num_purchases_diff_p_p20"] = (
         data_full_features["up_num_purchases"]
-        - data_full_features["p_num_purchases_per_user_q20"]
+        - data_full_features["p_num_purchases_per_user_p20"]
     )
-    df_temp["up_num_purchases_diff_p_q80"] = (
+    df_temp["up_num_purchases_diff_p_p80"] = (
         data_full_features["up_num_purchases"]
-        - data_full_features["p_num_purchases_per_user_q80"]
+        - data_full_features["p_num_purchases_per_user_p80"]
     )
 
     data_full_features = pd.concat([data_full_features, df_temp], axis=1)

@@ -66,6 +66,8 @@ chances_r5["num_up_purchases_chances_r5"] = (
 chances_r5["up_reorder_tendency_proba_r5"] = (
     chances_r5["up_num_purchases_r5"] - 1
 ) / chances_r5["num_up_purchases_chances_r5"]
+# products ordered in the latest order or products not ordered in the recent 5 orders have 
+# reorder_tendency_proba as nan
 chances_r5.replace({float("-inf"): np.nan, float("inf"): np.nan}, inplace=True)
 
 chances_r5[["user_id", "product_id", "up_reorder_tendency_proba_r5"]].to_pickle(
