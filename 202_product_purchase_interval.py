@@ -1,6 +1,6 @@
 import pandas as pd
 import time
-from utils import max_no_outliers, min_no_outliers, q20, q80
+from utils import max_no_outliers, min_no_outliers, p20, p80
 
 pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
@@ -27,8 +27,8 @@ product_purchase_cycle = (
                 "mean",
                 "std",
                 "median",
-                q20,
-                q80,
+                p20,
+                p80,
                 max_no_outliers,
                 min_no_outliers,
             ]
@@ -41,8 +41,8 @@ product_purchase_cycle.columns = [
     "p_purchase_interval_days_mean",
     "p_purchase_interval_days_std",
     "p_purchase_interval_days_median",
-    "p_purchase_interval_days_q20",
-    "p_purchase_interval_days_q80",
+    "p_purchase_interval_days_p20",
+    "p_purchase_interval_days_p80",
     "p_purchase_interval_days_max_woo",
     "p_purchase_interval_days_min_woo",
 ]

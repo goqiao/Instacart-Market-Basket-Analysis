@@ -1,6 +1,6 @@
 import pandas as pd
 import time
-from utils import max_no_outliers, min_no_outliers, q20, q80
+from utils import max_no_outliers, min_no_outliers, p20, p80
 
 
 # parameters:
@@ -19,8 +19,8 @@ order_interval = df.groupby(["product_id"]).agg(
             "mean",
             "std",
             "median",
-            q20,
-            q80,
+            p20,
+            p80,
             max_no_outliers,
             min_no_outliers,
         ]
@@ -30,8 +30,8 @@ order_interval.columns = [
     "p_order_interval_mean",
     "p_order_interval_std",
     "p_order_interval_median",
-    "p_order_interval_q20",
-    "p_order_interval_q80",
+    "p_order_interval_p20",
+    "p_order_interval_p80",
     "p_order_interval_max_woo",
     "p_order_interval_min_woo",
 ]

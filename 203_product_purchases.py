@@ -1,6 +1,6 @@
 import pandas as pd
 import time
-from utils import q20, q80
+from utils import p20, p80
 
 """
 On average, how many times each product tend to be purchased?
@@ -31,7 +31,7 @@ prod_users = (
 print("cal stats..")
 prod = (
     prod_users.groupby(["product_id"])
-    .agg({"num_purchases_per_user": ["mean", "std", "median", "max", "min", q20, q80]})
+    .agg({"num_purchases_per_user": ["mean", "std", "median", "max", "min", p20, p80]})
     .reset_index()
 )
 prod.columns = [
@@ -41,8 +41,8 @@ prod.columns = [
     "p_num_purchases_per_user_median",
     "p_num_purchases_per_user_max",
     "p_num_purchases_per_user_min",
-    "p_num_purchases_per_user_q20",
-    "p_num_purchases_per_user_q80",
+    "p_num_purchases_per_user_p20",
+    "p_num_purchases_per_user_p80",
 ]
 print(prod.head())
 
