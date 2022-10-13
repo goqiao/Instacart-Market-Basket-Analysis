@@ -2,7 +2,7 @@ import xgboost
 import pandas as pd
 import time
 import mlflow
-from utils import custom_refcv_drop, custom_refcv_drop_2
+from utils import feature_selection
 from sklearn.model_selection import GroupKFold
 
 """
@@ -14,17 +14,10 @@ data_folder = "data"
 sample_frac = 0.4
 
 experiment_name = "Instacart CV"
-run_name = "- high_corr custom refcv, 95 features + up order interval (6) + trend in purchase interval(2) + order interval readiness(3), + p_order_interval(12) frac 0.4"
-
+run_name = "2 rfe drop + added features, 123 features, frac 0.4"
 
 # data
 data_full_features = pd.read_pickle("{}/train_full_features.pickle".format(data_folder))
-
-
-# up_order_interval = pd.read_pickle('data/up_orders_interval.pickle')
-# data_full_features = data_full_features.merge(up_order_interval, how='left'
-#                         , left_on=['user_id', 'product_id'], right_index=True)
-
 
 data_full_features = data_full_features.sample(
     frac=sample_frac, random_state=1
@@ -35,11 +28,8 @@ y = data_full_features["reordered"]
 drop_cols = ["order_id", "user_id", "product_id"]
 X = X.drop(columns=drop_cols)
 
-X = custom_refcv_drop(X)
-X = custom_refcv_drop_2(X)
-
-# assert X.shape[1] == 118  124?
-
+X = feature_selection(X)
+assert X.shape[1] == 123
 
 # splitter
 cv_split_base = data_full_features["user_id"]

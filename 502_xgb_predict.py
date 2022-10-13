@@ -5,7 +5,7 @@ import time
 import xgboost
 
 pd.set_option("display.max_columns", None)
-from utils import custom_refcv_drop, custom_refcv_drop_2
+from utils import feature_selection
 
 start_time = time.time()
 data_folder = "data"
@@ -16,9 +16,8 @@ def xgb_predict_proba_pipe(X, data_folder="data", return_data=False, scaling=Fal
     if "reordered" in X.columns:
         # test data
         X = X.drop("reordered", axis=1)
-        X = custom_refcv_drop(X)
-        X = custom_refcv_drop_2(X)
-        assert X.columns.nunique() == 118
+        X = feature_selection(X)
+        assert X.columns.nunique() == 123
     if scaling:
         scaler = joblib.load("{}/xgb_scaler.joblib".format(data_folder))
         X = scaler.transform(X)

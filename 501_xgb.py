@@ -1,19 +1,19 @@
-import xgboost
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
-import joblib
-from utils import split_data, custom_refcv_drop, custom_refcv_drop_2
-import matplotlib.pyplot as plt
-import time
-import mlflow
 import gc
+import time
+import joblib
+import matplotlib.pyplot as plt
+import mlflow
+import pandas as pd
+import xgboost
+from sklearn.preprocessing import StandardScaler
+from utils import feature_selection, split_data
 
 # takes 17 mins
 start_time = time.time()
 if __name__ == "__main__":
     # experiment setting
     experiment_name = "Instacart"
-    run_name = "- high_corr custom refcv, 95 features + order interval (6) + trend in purchase interval(2) + order interval readiness(3) , frac 0.4"
+    run_name = "2 rfe drop + added features, 123 features, frac 0.4"
 
     data_folder = "data"
     sample_frac = 0.6
@@ -22,14 +22,12 @@ if __name__ == "__main__":
     data_full_features = pd.read_pickle(
         "{}/train_full_features.pickle".format(data_folder)
     )
-    print("train set BEFORE sampling:")
-    print(data_full_features.shape)
+
     # use part of the data for speed and memory
     data_full_features = data_full_features.sample(
         frac=sample_frac, random_state=0
     ).reset_index(drop=True)
-    print("train set AFTER sampling:")
-    print(data_full_features.shape)
+
     X_train, X_val, y_train, y_val = split_data(
         data_full_features,
         test_size=test_size,
@@ -67,14 +65,11 @@ if __name__ == "__main__":
     X_val = X_val.drop(columns=drop_cols)
 
     # feature selection
-    X_train = custom_refcv_drop(X_train)
-    X_val = custom_refcv_drop(X_val)
-
-    X_train = custom_refcv_drop_2(X_train)
-    X_val = custom_refcv_drop_2(X_val)
+    X_val = feature_selection(X_val)
 
     print("X_train Shape: ", X_train.shape)
-    assert X_train.columns.nunique() == 118
+    print(X_train.shape)
+    assert X_train.columns.nunique() == 123
 
     xgb_params = {
         "n_estimators": 1000,
