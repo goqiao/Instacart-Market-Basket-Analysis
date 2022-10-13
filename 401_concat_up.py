@@ -54,6 +54,7 @@ def make_data(data_folder="data", make_set="train"):
         "data/up_purchase_interval_trend.pickle"
     )
     up_order_interval = pd.read_pickle("data/up_orders_interval.pickle")
+    up_order_interval_r5 = pd.read_pickle("data/up_orders_interval_r5.pickle")
 
     idx_cols = ["user_id"]
     users_features = pd.read_pickle("data/users_features.pickle").set_index(idx_cols)
@@ -158,6 +159,9 @@ def make_data(data_folder="data", make_set="train"):
     data_full_features = data_full_features.join(
         up_order_interval, on=["user_id", "product_id"], how="left"
     )
+    data_full_features = data_full_features.join(
+        up_order_interval_r5, on=["user_id", "product_id"], how="left"
+    )
     # data_full_features = data_full_features.join(up_cart_order, on=['user_id', 'product_id'], how='left')
 
     data_full_features = data_full_features.join(
@@ -233,9 +237,10 @@ def make_data(data_folder="data", make_set="train"):
         products_purchases_features,
         product_purchase_cycle,
         product_special_features,
+        products_embedding,
+        product_sub_stats,
+        product_order_interval,
     )
-    products_embedding, product_sub_stats, product_order_interval
-
     # create extra features
     df_temp = pd.DataFrame()
     data_full_features["up_num_orders_not_purchase"] = (
@@ -339,8 +344,10 @@ def make_data(data_folder="data", make_set="train"):
         data_full_features["up_num_purchases"]
         - data_full_features["p_num_purchases_per_user_max"]
     )
-    # df_temp['up_num_purchases_diff_p_min'] = data_full_features['up_num_purchases'] - data_full_features[
-    #     'p_num_purchases_per_user_min']  # highly correlated with up_num_purchases_diff_p_p20
+    df_temp["up_num_purchases_diff_p_min"] = (
+        data_full_features["up_num_purchases"]
+        - data_full_features["p_num_purchases_per_user_min"]
+    )  # highly correlated with up_num_purchases_diff_p_p20
     df_temp["up_num_purchases_diff_p_p20"] = (
         data_full_features["up_num_purchases"]
         - data_full_features["p_num_purchases_per_user_p20"]
@@ -355,12 +362,13 @@ def make_data(data_folder="data", make_set="train"):
     # clean memory
     gc.collect()
     del df_temp
-    data_full_features = improve_data_type(data_full_features.reset_index())
-
+    # data_full_features = improve_data_type(data_full_features.reset_index())
+    data_full_features = improve_data_type(data_full_features)
+    data_full_features.reset_index(inplace=True)
     # change columns type to string
-    print(data_full_features.dtypes)
     data_full_features.columns = data_full_features.columns.astype("str")
-    assert data_full_features.shape[1] == 237
+
+    assert data_full_features.shape[1] == 242
     print("finish creating {} data set".format(make_set))
     data_full_features.to_pickle("data/{}_full_features.pickle".format(make_set))
 
