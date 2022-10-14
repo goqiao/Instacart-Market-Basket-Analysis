@@ -65,6 +65,7 @@ if __name__ == "__main__":
     X_val = X_val.drop(columns=drop_cols)
 
     # feature selection
+    X_train = feature_selection(X_train)
     X_val = feature_selection(X_val)
 
     print("X_train Shape: ", X_train.shape)
