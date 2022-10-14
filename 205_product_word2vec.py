@@ -40,6 +40,7 @@ model = gensim.models.Word2Vec(
     window=max_num_prods,
     workers=8,
 )
+model.save("data/word2vec.model")
 
 # get word embedding
 prods_embedding = pd.DataFrame(

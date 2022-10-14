@@ -26,4 +26,3 @@ orders_interval = (
 orders_interval.columns = ["user_id", "user_orders_days_interval_trend"]
 
 orders_interval.to_pickle("data/users_orders_interval_trend.pickle")
-

@@ -22,7 +22,6 @@ def multi(i):
     #     print('{:.3f} min'.format((time.time()-start_time)/60))
     items = up_prob.loc[i, "product_id"]
     preds = up_prob.loc[i, "pred_proba"]
-    # pNone = up.loc[i,'pred_proba_None']
     ret = get_best_prediction(items, preds, pNone=None)
     return ret
 
