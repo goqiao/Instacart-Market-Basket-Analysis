@@ -10,16 +10,16 @@ All the files executions are coded in `run.py` files. We can get 0.403 on Kaggle
 - python run.py
 
 # Requirements
-About 6 GB memory needed for training.
-gensim==4.2.0
-joblib==1.1.0
-matplotlib==3.5.2
-mlflow==1.27.0
-numpy==1.19.5
-pandas==1.4.3
-scikit_learn==1.1.2
-scipy==1.9.1
-seaborn==0.11.2
-shap==0.41.0
-xgboost==1.6.2
+About 6 GB memory needed for training. Required packages:
+- gensim==4.2.0
+- joblib==1.1.0
+- matplotlib==3.5.2
+- mlflow==1.27.0
+- numpy==1.19.5
+- pandas==1.4.3
+- scikit_learn==1.1.2
+- scipy==1.9.1
+- seaborn==0.11.2
+- shap==0.41.0
+- xgboost==1.6.2
 
