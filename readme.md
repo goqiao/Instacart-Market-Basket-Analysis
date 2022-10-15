@@ -2,7 +2,7 @@ Instacart Reorder Prediction
 ==============
 My solution for the [Instacart Market Basket Analysis](https://www.kaggle.com/competitions/instacart-market-basket-analysis/overview) competition hosted on Kaggle.
 
-[Intacart Reorder Prediction Report](https://github.com/goqiao/Instacart/blob/a46f905ea7aa2a7849c9e2085554ba47689c0f6e/Instacart%20Reorder%20Prediction%20Report.pdf) -> 👋 Start here! This is a detailed description of the project
+[Intacart Reorder Prediction Report](https://github.com/goqiao/Instacart-Market-Basket-Analysis/blob/master/Instacart%20Reorder%20Prediction%20Report.pdf) -> 👋 Start here! This is a detailed description of the project
 
 
 # How to Run
