@@ -1,11 +1,11 @@
 # These Juypter notebooks contain images, and tables, 
 # blowing up the total language fraction unrealistically;
-901_top_features.ipynb linguist-generated=true
-902_insights.ipynb linguist-generated=true
-903_eda_visualization.ipynb linguist-generated=true
-904_shap_values_single_instance.ipynb linguist-generated=true
-905_word2vec.ipynb linguist-generated=true
-906_kmeans_cluster.ipynb linguist-generated=true
-907_association_rules.ipynb linguist-generated=true
-908_refcv_customize.ipynb linguist-generated=true
-909_refcv_customize_round2.ipynb linguist-generated=true
+901_top_features.ipynb linguist-generated
+902_insights.ipynb linguist-generated
+903_eda_visualization.ipynb linguist-generated
+904_shap_values_single_instance.ipynb linguist-generated
+905_word2vec.ipynb linguist-generated
+906_kmeans_cluster.ipynb linguist-generated
+907_association_rules.ipynb linguist-generated
+908_refcv_customize.ipynb linguist-generated
+909_refcv_customize_round2.ipynb linguist-generated
