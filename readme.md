@@ -14,7 +14,7 @@ About 6 GB memory needed for training. Required packages:
 - gensim==4.2.0
 - joblib==1.1.0
 - matplotlib==3.5.2
-- mlflow==1.27.0
+- mlflow==2.11.3
 - numpy==1.19.5
 - pandas==1.4.3
 - scikit_learn==1.1.2
